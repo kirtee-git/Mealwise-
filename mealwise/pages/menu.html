@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MealWise – Today's Menu</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .menu-page { padding: 50px 60px; }
+
+    /* ===== MENU CARDS ===== */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: 18px;
+      padding: 28px 24px;
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(26, 43, 95, 0.15);
+    }
+
+    .menu-card-icon { font-size: 40px; margin-bottom: 14px; }
+
+    .menu-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+
+    .menu-items-list { font-size: 13px; color: var(--muted); }
+
+    .menu-items-list li {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .menu-items-list li:last-child { border-bottom: none; }
+
+    .select-menu-btn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 11px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .select-menu-btn:hover        { background: var(--accent); }
+    .select-menu-btn.selected     { background: var(--green); }
+    .select-menu-btn.selected:hover { background: #16a34a; }
+
+    /* ===== BOTTOM CTA ===== */
+    .book-cta { text-align: center; }
+
+    .book-now-btn {
+      padding: 16px 48px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .book-now-btn:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(26, 43, 95, 0.2);
+    }
+
+    /* ===== NUTRITIONAL BADGE ===== */
+    .nutrition-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .nut-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 700;
+      background: var(--light-blue);
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      .menu-page { padding: 24px; }
+      .menu-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <script src="../js/main.js"></script>
+  <script>renderNavbar(); renderToast();</script>
+
+  <div class="menu-page">
+
+    <div class="section-header">
+      <h2>Explore Today's Menu</h2>
+      <p>
+        Stay updated with daily meal options, nutritional details, and booking
+        availability — all designed to make your mess experience simple and convenient.
+      </p>
+    </div>
+
+    <div class="menu-grid">
+
+      <!-- BREAKFAST -->
+      <div class="menu-card">
+        <div class="menu-card-icon">☀️</div>
+        <h3>Breakfast Menu</h3>
+        <ul class="menu-items-list">
+          <li>🫓 Pav Bhaji</li>
+          <li>🥣 Poha / Upma</li>
+          <li>🍌 Seasonal Fruits</li>
+          <li>☕ Tea / Coffee</li>
+        </ul>
+        <div class="nutrition-badges">
+          <span class="nut-badge">~350 kcal</span>
+          <span class="nut-badge">Veg</span>
+        </div>
+        <button class="select-menu-btn" id="btn-breakfast" onclick="selectMeal('breakfast')">
+          SELECT →
+        </button>
+      </div>
+
+      <!-- LUNCH -->
+      <div class="menu-card">
+        <div class="menu-card-icon">🌤️</div>
+        <h3>Lunch Menu</h3>
+        <ul class="menu-items-list">
+          <li>🍚 Dal Rice</li>
+          <li>🧆 Sabzi + Roti</li>
+          <li>🥗 Salad</li>
+          <li>🍦 Papad / Pickle</li>
+        </ul>
+        <div class="nutrition-badges">
+          <span class="nut-badge">~550 kcal</span>
+          <span class="nut-badge">Veg</span>
+        </div>
+        <button class="select-menu-btn" id="btn-lunch" onclick="selectMeal('lunch')">
+          SELECT →
+        </button>
+      </div>
+
+      <!-- DINNER -->
+      <div class="menu-card">
+        <div class="menu-card-icon">🌙</div>
+        <h3>Dinner Menu</h3>
+        <ul class="menu-items-list">
+          <li>🍛 Paneer Masala</li>
+          <li>🫓 Roti / Naan</li>
+          <li>🥣 Dal Tadka</li>
+          <li>🍚 Jeera Rice</li>
+        </ul>
+        <div class="nutrition-badges">
+          <span class="nut-badge">~600 kcal</span>
+          <span class="nut-badge">Veg</span>
+        </div>
+        <button class="select-menu-btn" id="btn-dinner" onclick="selectMeal('dinner')">
+          SELECT →
+        </button>
+      </div>
+
+      <!-- MEAL BOOKING -->
+      <div class="menu-card">
+        <div class="menu-card-icon">🛒</div>
+        <h3>Meal Booking</h3>
+        <ul class="menu-items-list">
+          <li>📅 Book in advance</li>
+          <li>❌ Cancel anytime</li>
+          <li>🔔 Get reminders</li>
+          <li>💰 Save on waste</li>
+        </ul>
+        <div class="nutrition-badges">
+          <span class="nut-badge">Flexible</span>
+        </div>
+        <button class="select-menu-btn" onclick="window.location.href='dashboard.html'">
+          MANAGE →
+        </button>
+      </div>
+
+    </div>
+
+    <div class="book-cta">
+      <button class="book-now-btn" onclick="bookAll()">Book Your Meal Now →</button>
+    </div>
+
+  </div>
+
+  <script>
+    const selected = { breakfast: false, lunch: false, dinner: false };
+
+    function selectMeal(meal) {
+      selected[meal] = !selected[meal];
+      const btn = document.getElementById('btn-' + meal);
+      if (selected[meal]) {
+        btn.textContent = '✅ SELECTED';
+        btn.classList.add('selected');
+        showToast(capitalize(meal) + ' added to your booking ✅');
+      } else {
+        btn.textContent = 'SELECT →';
+        btn.classList.remove('selected');
+        showToast(capitalize(meal) + ' removed ❌');
+      }
+    }
+
+    function bookAll() {
+      const any = Object.values(selected).some(Boolean);
+      if (!any) {
+        showToast('⚠️ Please select at least one meal first');
+        return;
+      }
+      showToast('All selected meals booked! 🍽️');
+      setTimeout(() => window.location.href = 'dashboard.html', 1200);
+    }
+
+    function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  </script>
+
+</body>
+</html>

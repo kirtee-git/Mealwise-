@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MealWise – My Meals</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .dashboard {
+      padding: 40px 60px;
+      min-height: calc(100vh - 64px);
+      background: var(--gray);
+    }
+
+    /* ===== HEADER ===== */
+    .dash-header { margin-bottom: 36px; }
+
+    .welcome-text {
+      font-family: 'Nunito', sans-serif;
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--navy);
+    }
+
+    .welcome-sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+      max-width: 650px;
+      line-height: 1.7;
+    }
+
+    /* ===== STATS ROW ===== */
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-icon  { font-size: 28px; margin-bottom: 12px; }
+    .stat-value {
+      font-family: 'Nunito', sans-serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--navy);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    /* ===== MEAL CARDS ===== */
+    .section-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 18px;
+    }
+
+    .meal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+
+    .meal-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s;
+    }
+
+    .meal-card:hover { transform: translateY(-3px); }
+
+    .meal-img {
+      height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      background: var(--light-blue);
+    }
+
+    .meal-info { padding: 16px; }
+
+    .meal-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .meal-time {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .meal-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-booked { background: #dcfce7; color: #15803d; }
+    .status-not    { background: #fee2e2; color: #b91c1c; }
+
+    .meal-action {
+      margin-top: 10px;
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .meal-action.book   { background: var(--navy); color: white; }
+    .meal-action.book:hover   { background: var(--accent); }
+    .meal-action.cancel { background: #fee2e2; color: #b91c1c; }
+    .meal-action.cancel:hover { background: #fecaca; }
+
+    .cta-row { text-align: center; }
+
+    @media (max-width: 900px) {
+      .dashboard   { padding: 24px; }
+      .dash-stats  { grid-template-columns: 1fr 1fr; }
+      .meal-grid   { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <script src="../js/main.js"></script>
+  <script>renderNavbar(); renderToast();</script>
+
+  <div class="dashboard">
+
+    <!-- HEADER -->
+    <div class="dash-header">
+      <div class="welcome-text">Welcome, Kirtee 👋</div>
+      <p class="welcome-sub">
+        Our system is designed to simplify mess management by bringing all essential
+        services into one digital platform. From meal planning and attendance tracking
+        to payments and feedback, everything becomes easier, faster, and more organized.
+      </p>
+    </div>
+
+    <!-- STATS -->
+    <div class="dash-stats">
+      <div class="stat-card">
+        <div class="stat-icon">🍽️</div>
+        <div class="stat-value">23</div>
+        <div class="stat-label">Meals This Month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value" id="booked-count">3</div>
+        <div class="stat-label">Today Booked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💚</div>
+        <div class="stat-value">94%</div>
+        <div class="stat-label">Attendance Rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🪙</div>
+        <div class="stat-value">₹480</div>
+        <div class="stat-label">Balance Left</div>
+      </div>
+    </div>
+
+    <!-- MEAL STATUS -->
+    <div class="section-title">Today's Meal Status</div>
+    <div class="meal-grid">
+
+      <div class="meal-card">
+        <div class="meal-img">🫓</div>
+        <div class="meal-info">
+          <div class="meal-name">Breakfast</div>
+          <div class="meal-time">7:00 AM – 9:30 AM</div>
+          <span class="meal-status status-booked" id="status-breakfast">✅ Meal Booked</span>
+          <button class="meal-action cancel" onclick="toggleMeal('breakfast')">Cancel Booking</button>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-img">🍛</div>
+        <div class="meal-info">
+          <div class="meal-name">Lunch</div>
+          <div class="meal-time">12:00 PM – 2:30 PM</div>
+          <span class="meal-status status-booked" id="status-lunch">✅ Meal Booked</span>
+          <button class="meal-action cancel" onclick="toggleMeal('lunch')">Cancel Booking</button>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-img">🍱</div>
+        <div class="meal-info">
+          <div class="meal-name">Snacks</div>
+          <div class="meal-time">4:00 PM – 5:30 PM</div>
+          <span class="meal-status status-booked" id="status-snacks">✅ Meal Booked</span>
+          <button class="meal-action cancel" onclick="toggleMeal('snacks')">Cancel Booking</button>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-img">🥘</div>
+        <div class="meal-info">
+          <div class="meal-name">Dinner</div>
+          <div class="meal-time">7:30 PM – 9:30 PM</div>
+          <span class="meal-status status-not" id="status-dinner">❌ Not Booked</span>
+          <button class="meal-action book" onclick="toggleMeal('dinner')">Book Now</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cta-row">
+      <a href="menu.html" class="btn-primary">View Full Menu →</a>
+    </div>
+
+  </div>
+
+  <script>
+    // Track booked state for each meal
+    const mealState = {
+      breakfast: true,
+      lunch:     true,
+      snacks:    true,
+      dinner:    false
+    };
+
+    function updateBookedCount() {
+      const count = Object.values(mealState).filter(Boolean).length;
+      document.getElementById('booked-count').textContent = count;
+    }
+
+    function toggleMeal(meal) {
+      mealState[meal] = !mealState[meal];
+      const statusEl = document.getElementById('status-' + meal);
+      const btn = statusEl.nextElementSibling;
+
+      if (mealState[meal]) {
+        statusEl.textContent = '✅ Meal Booked';
+        statusEl.className   = 'meal-status status-booked';
+        btn.textContent      = 'Cancel Booking';
+        btn.className        = 'meal-action cancel';
+        showToast(capitalize(meal) + ' booked! ✅');
+      } else {
+        statusEl.textContent = '❌ Not Booked';
+        statusEl.className   = 'meal-status status-not';
+        btn.textContent      = 'Book Now';
+        btn.className        = 'meal-action book';
+        showToast(capitalize(meal) + ' booking cancelled ❌');
+      }
+      updateBookedCount();
+    }
+
+    function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  </script>
+
+</body>
+</html>

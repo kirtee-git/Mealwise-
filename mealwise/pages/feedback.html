@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MealWise – Feedback &amp; Reviews</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .feedback-page { padding: 50px 60px; }
+
+    /* ===== LAYOUT ===== */
+    .feedback-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1.1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ===== WRITE REVIEW CARD ===== */
+    .write-card {
+      background: white;
+      border-radius: 18px;
+      padding: 28px;
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .write-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    /* STAR RATING */
+    .star-group {
+      display: flex;
+      gap: 6px;
+      font-size: 28px;
+      cursor: pointer;
+      margin-bottom: 18px;
+    }
+
+    .star-group span { transition: transform 0.1s; }
+    .star-group span:hover { transform: scale(1.2); }
+
+    .send-fb-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .send-fb-btn:hover { background: var(--accent); }
+
+    /* ===== REVIEWS CARD ===== */
+    .reviews-card {
+      background: white;
+      border-radius: 18px;
+      padding: 28px;
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .reviews-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    .review-item {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .review-item:last-child { border-bottom: none; }
+
+    .reviewer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .reviewer-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .stars         { color: var(--orange); font-size: 13px; }
+    .review-date   { font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+    .review-text   { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* ===== RATING CHART ===== */
+    .rating-card {
+      background: white;
+      border-radius: 18px;
+      padding: 28px;
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .rating-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 20px;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 110px;
+      margin-bottom: 20px;
+      padding: 0 4px;
+    }
+
+    .bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+
+    .bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      background: linear-gradient(180deg, var(--accent) 0%, var(--navy) 100%);
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .bar:hover { opacity: 0.8; }
+
+    .bar-label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    .avg-score {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .avg-score .big {
+      font-family: 'Nunito', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .avg-score .stars-big { font-size: 18px; color: var(--orange); }
+    .avg-score .total     { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    @media (max-width: 1100px) {
+      .feedback-layout { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 750px) {
+      .feedback-page   { padding: 24px; }
+      .feedback-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <script src="../js/main.js"></script>
+  <script>renderNavbar(); renderToast();</script>
+
+  <div class="feedback-page">
+
+    <div class="section-header">
+      <h2>Student Feedback &amp; Reviews</h2>
+      <p>
+        Your opinion matters to us. Share your experience about today's meal, food quality,
+        hygiene, and service so we can continuously improve the mess facilities.
+      </p>
+    </div>
+
+    <div class="feedback-layout">
+
+      <!-- WRITE REVIEW -->
+      <div class="write-card">
+        <h4>✍️ Share Your Feedback</h4>
+
+        <div class="form-group">
+          <label>Your Rating</label>
+          <div class="star-group" id="star-rating">
+            <span onclick="setRating(1)">☆</span>
+            <span onclick="setRating(2)">☆</span>
+            <span onclick="setRating(3)">☆</span>
+            <span onclick="setRating(4)">☆</span>
+            <span onclick="setRating(5)">☆</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="meal-select">Meal Type</label>
+          <select id="meal-select" class="form-input form-select">
+            <option>Breakfast</option>
+            <option>Lunch</option>
+            <option>Snacks</option>
+            <option>Dinner</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fb-name">Your Name</label>
+          <input type="text" id="fb-name" class="form-input" placeholder="e.g. Kirtee Pimpalshende" />
+        </div>
+
+        <div class="form-group">
+          <label for="fb-text">Your Review</label>
+          <textarea
+            id="fb-text"
+            class="form-input"
+            rows="4"
+            placeholder="Share your experience about today's meal..."
+            style="resize:none;"
+          ></textarea>
+        </div>
+
+        <button class="send-fb-btn" onclick="submitFeedback()">Send us Feedback →</button>
+      </div>
+
+      <!-- REVIEWS LIST -->
+      <div class="reviews-card">
+        <h4>Recent Reviews</h4>
+
+        <div id="reviews-list">
+          <div class="review-item">
+            <div class="reviewer-row">
+              <span class="reviewer-name">Sarah Johnson</span>
+              <span class="stars">★★★★★</span>
+            </div>
+            <div class="review-date">Feb 18, 2026</div>
+            <div class="review-text">MealWise has completely transformed how I plan my meals. The suggestions are spot on!</div>
+          </div>
+
+          <div class="review-item">
+            <div class="reviewer-row">
+              <span class="reviewer-name">Mike Chen</span>
+              <span class="stars">★★★★★</span>
+            </div>
+            <div class="review-date">Feb 8, 2026</div>
+            <div class="review-text">Love the variety of healthy options. Makes eating smart so much easier.</div>
+          </div>
+
+          <div class="review-item">
+            <div class="reviewer-row">
+              <span class="reviewer-name">Emily Rodriguez</span>
+              <span class="stars">★★★★☆</span>
+            </div>
+            <div class="review-date">Feb 5, 2026</div>
+            <div class="review-text">Great app overall! Would love to see more vegetarian options.</div>
+          </div>
+
+          <div class="review-item">
+            <div class="reviewer-row">
+              <span class="reviewer-name">Rahul Sharma</span>
+              <span class="stars">★★★★★</span>
+            </div>
+            <div class="review-date">Feb 2, 2026</div>
+            <div class="review-text">The booking system is seamless. No more standing in queues!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RATING CHART -->
+      <div class="rating-card">
+        <h4>Rating Summary</h4>
+
+        <div class="avg-score">
+          <div class="big">4.6</div>
+          <div class="stars-big">★★★★★</div>
+          <div class="total">690 total reviews</div>
+        </div>
+
+        <div class="chart-bars">
+          <div class="bar-group">
+            <div class="bar" style="height:90px;"></div>
+            <div class="bar-label">5★</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:35px;"></div>
+            <div class="bar-label">4★</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:18px;"></div>
+            <div class="bar-label">3★</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:8px;"></div>
+            <div class="bar-label">2★</div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:4px;"></div>
+            <div class="bar-label">1★</div>
+          </div>
+        </div>
+
+        <div class="rating-bar-row">
+          <span class="rating-label">5 Stars</span>
+          <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:65%;"></div></div>
+          <span class="rating-count">450</span>
+        </div>
+        <div class="rating-bar-row">
+          <span class="rating-label">4 Stars</span>
+          <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:22%;"></div></div>
+          <span class="rating-count">150</span>
+        </div>
+        <div class="rating-bar-row">
+          <span class="rating-label">3 Stars</span>
+          <div class="rating-bar-bg">
+            <div class="rating-bar-fill" style="width:7%;background:var(--orange);"></div>
+          </div>
+          <span class="rating-count">50</span>
+        </div>
+        <div class="rating-bar-row">
+          <span class="rating-label">2 Stars</span>
+          <div class="rating-bar-bg">
+            <div class="rating-bar-fill" style="width:4%;background:var(--orange);"></div>
+          </div>
+          <span class="rating-count">25</span>
+        </div>
+        <div class="rating-bar-row">
+          <span class="rating-label">1 Star</span>
+          <div class="rating-bar-bg">
+            <div class="rating-bar-fill" style="width:2%;background:var(--red);"></div>
+          </div>
+          <span class="rating-count">15</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let currentRating = 0;
+
+    function setRating(n) {
+      currentRating = n;
+      const spans = document.querySelectorAll('#star-rating span');
+      spans.forEach((s, i) => s.textContent = i < n ? '⭐' : '☆');
+    }
+
+    function starsHTML(n) {
+      return '★'.repeat(n) + '☆'.repeat(5 - n);
+    }
+
+    function submitFeedback() {
+      const name = document.getElementById('fb-name').value.trim();
+      const text = document.getElementById('fb-text').value.trim();
+
+      if (!name || !text) {
+        showToast('⚠️ Please fill in your name and review');
+        return;
+      }
+      if (currentRating === 0) {
+        showToast('⚠️ Please select a star rating');
+        return;
+      }
+
+      // Inject the new review at top of list
+      const today = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+      const newReview = `
+        <div class="review-item" style="animation:fadeIn 0.4s ease">
+          <div class="reviewer-row">
+            <span class="reviewer-name">${name}</span>
+            <span class="stars">${starsHTML(currentRating)}</span>
+          </div>
+          <div class="review-date">${today}</div>
+          <div class="review-text">${text}</div>
+        </div>
+      `;
+      document.getElementById('reviews-list').insertAdjacentHTML('afterbegin', newReview);
+
+      // Reset form
+      document.getElementById('fb-name').value = '';
+      document.getElementById('fb-text').value = '';
+      setRating(0);
+
+      showToast('Feedback submitted! Thank you 🙏');
+    }
+  </script>
+
+</body>
+</html>

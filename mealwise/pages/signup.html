@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MealWise – Sign Up</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .signup-page {
+      min-height: calc(100vh - 64px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ===== LEFT PANEL ===== */
+    .signup-left {
+      background: linear-gradient(160deg, var(--navy) 0%, var(--accent) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+      color: white;
+    }
+
+    .signup-left h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .signup-left p {
+      font-size: 15px;
+      opacity: 0.85;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .canteen-gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .canteen-img {
+      height: 120px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+
+    /* ===== RIGHT PANEL ===== */
+    .signup-right {
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+    }
+
+    .signup-form {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .signup-form h3 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .signup-form > p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 30px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      background: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .login-link a {
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .login-link a:hover { text-decoration: underline; }
+
+    @media (max-width: 900px) {
+      .signup-page { grid-template-columns: 1fr; }
+      .signup-left  { padding: 40px 24px; }
+      .signup-right { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <script src="../js/main.js"></script>
+  <script>renderNavbar(); renderToast();</script>
+
+  <div class="signup-page">
+
+    <!-- LEFT -->
+    <div class="signup-left">
+      <h2>MealWise: Smart Mess Attendance &amp; Food Management System</h2>
+      <p>
+        A smart and efficient way to manage mess services, food menus, attendance,
+        and feedback in one place for students and administrators.
+      </p>
+      <div class="canteen-gallery">
+        <div class="canteen-img">🍛</div>
+        <div class="canteen-img">🍱</div>
+        <div class="canteen-img">🥗</div>
+        <div class="canteen-img">🫓</div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="signup-right">
+      <div class="signup-form">
+        <h3>Create Account</h3>
+        <p>Join MealWise and simplify your mess experience</p>
+
+        <div class="form-group">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" class="form-input" placeholder="e.g. Kirtee Pimpalshende" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="your@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label for="studentid">Student ID</label>
+          <input type="text" id="studentid" class="form-input" placeholder="e.g. STU2024001" />
+        </div>
+
+        <div class="form-group">
+          <label for="role">Role</label>
+          <select id="role" class="form-input form-select">
+            <option>Student</option>
+            <option>Admin / Mess Staff</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="Create a strong password" />
+        </div>
+
+        <button class="submit-btn" onclick="handleSignup()">Sign Up →</button>
+
+        <p class="login-link">
+          Already have an account?
+          <a href="dashboard.html">Log in</a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function handleSignup() {
+      const name  = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      if (!name || !email) {
+        showToast('⚠️ Please fill in all fields');
+        return;
+      }
+      showToast('Account created! Welcome to MealWise 🎉');
+      setTimeout(() => window.location.href = 'dashboard.html', 1200);
+    }
+  </script>
+
+</body>
+</html>

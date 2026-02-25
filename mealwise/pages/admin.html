@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MealWise – Admin Dashboard</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .admin-page {
+      padding: 40px 60px;
+      background: #f1f5f9;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* ===== HEADER ===== */
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .admin-header h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--navy);
+    }
+
+    .admin-header p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .header-actions { display: flex; gap: 12px; align-items: center; }
+
+    .live-badge {
+      background: var(--navy);
+      color: white;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-dot {
+      width: 8px; height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    /* ===== STAT CARDS ===== */
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+
+    .admin-stat {
+      background: white;
+      border-radius: 16px;
+      padding: 22px;
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .admin-stat .icon { font-size: 26px; margin-bottom: 10px; }
+
+    .admin-stat .val {
+      font-family: 'Nunito', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--navy);
+    }
+
+    .admin-stat .lbl {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .admin-stat .change {
+      font-size: 11px;
+      margin-top: 5px;
+      font-weight: 600;
+    }
+
+    .change.up   { color: var(--green); }
+    .change.down { color: var(--red); }
+
+    /* ===== GRID ROWS ===== */
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .admin-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    /* ===== ADMIN CARD ===== */
+    .admin-card {
+      background: white;
+      border-radius: 18px;
+      padding: 28px;
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .admin-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .view-all {
+      font-size: 12px;
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .view-all:hover { text-decoration: underline; }
+
+    /* ===== STUDENT TABLE ===== */
+    .student-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .student-table th {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0 10px 12px 0;
+      text-align: left;
+    }
+
+    .student-table td {
+      padding: 11px 10px 11px 0;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    .student-name { font-weight: 600; color: var(--navy); }
+    .student-id   { color: var(--muted); font-size: 11px; }
+
+    /* ===== MENU POPULARITY ===== */
+    .menu-section       { margin-bottom: 18px; }
+    .menu-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .menu-item-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .menu-item-row:last-child { border-bottom: none; }
+
+    .item-name  { font-size: 13px; font-weight: 600; color: var(--navy); flex: 1; }
+    .item-votes { font-size: 12px; color: var(--accent); font-weight: 700; width: 40px; text-align: right; }
+
+    .pop-bar {
+      width: 80px;
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .pop-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+
+    /* ===== FEEDBACK LIST ===== */
+    .fb-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .fb-item:last-child { border-bottom: none; }
+
+    .fb-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .fb-author { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .fb-rating { color: var(--orange); font-size: 13px; }
+    .fb-text   { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* ===== ALERT BOX ===== */
+    .alert-box {
+      background: var(--light-blue);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--navy);
+      font-weight: 600;
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 1100px) {
+      .admin-stats  { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 900px) {
+      .admin-page   { padding: 24px; }
+      .admin-stats  { grid-template-columns: 1fr 1fr; }
+      .admin-grid   { grid-template-columns: 1fr; }
+      .admin-bottom { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <script src="../js/main.js"></script>
+  <script>renderNavbar(); renderToast();</script>
+
+  <div class="admin-page">
+
+    <!-- HEADER -->
+    <div class="admin-header">
+      <div>
+        <h2>🔧 Admin Dashboard</h2>
+        <p>MealWise Management Portal • Feb 25, 2026</p>
+      </div>
+      <div class="header-actions">
+        <div class="live-badge"><span class="live-dot"></span>Live</div>
+        <button class="btn-primary" style="font-size:13px;" onclick="exportReport()">
+          📤 Export Report
+        </button>
+      </div>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="admin-stats">
+      <div class="admin-stat">
+        <div class="icon">👥</div>
+        <div class="val">342</div>
+        <div class="lbl">Total Students</div>
+        <div class="change up">↑ +12 this week</div>
+      </div>
+      <div class="admin-stat">
+        <div class="icon">🍽️</div>
+        <div class="val">287</div>
+        <div class="lbl">Today's Attendance</div>
+        <div class="change up">↑ 84% rate</div>
+      </div>
+      <div class="admin-stat">
+        <div class="icon">♻️</div>
+        <div class="val">12kg</div>
+        <div class="lbl">Food Saved</div>
+        <div class="change up">↑ vs last week</div>
+      </div>
+      <div class="admin-stat">
+        <div class="icon">⭐</div>
+        <div class="val">4.6</div>
+        <div class="lbl">Avg. Rating</div>
+        <div class="change up">↑ +0.2 this month</div>
+      </div>
+      <div class="admin-stat">
+        <div class="icon">📊</div>
+        <div class="val">83%</div>
+        <div class="lbl">Poll Participation</div>
+        <div class="change down">↓ -3% vs yesterday</div>
+      </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="admin-grid">
+
+      <!-- STUDENT TABLE -->
+      <div class="admin-card">
+        <h4>
+          Student Attendance – Today
+          <a href="#" class="view-all">View All</a>
+        </h4>
+        <table class="student-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>ID</th>
+              <th>Breakfast</th>
+              <th>Lunch</th>
+              <th>Dinner</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="student-name">Kirtee Pimpalshende</div>
+              </td>
+              <td class="student-id">STU001</td>
+              <td><span class="badge present">Present</span></td>
+              <td><span class="badge present">Present</span></td>
+              <td><span class="badge absent">Absent</span></td>
+            </tr>
+            <tr>
+              <td><div class="student-name">Rahul Sharma</div></td>
+              <td class="student-id">STU002</td>
+              <td><span class="badge present">Present</span></td>
+              <td><span class="badge present">Present</span></td>
+              <td><span class="badge present">Present</span></td>
+            </tr>
+            <tr>
+              <td><div class="student-name">Priya Gupta</div></td>
+              <td class="student-id">STU003</td>
+              <td><span class="badge absent">Absent</span></td>
+              <td><span class="badge partial">Partial</span></td>
+              <td><span class="badge present">Present</span></td>
+            </tr>
+            <tr>
+              <td><div class="student-name">Ankit Desai</div></td>
+              <td class="student-id">STU004</td>
+              <td><span class="badge present">Present</span></td>
+              <td><span class="badge absent">Absent</span></td>
+              <td><span class="badge present">Present</span></td>
+            </tr>
+            <tr>
+              <td><div class="student-name">Sneha Patil</div></td>
+              <td class="student-id">STU005</td>
+              <td><span class="badge present">Present</span></td>
+              <td><span class="badge present">Present</span></td>
+              <td><span class="badge partial">Partial</span></td>
+            </tr>
+            <tr>
+              <td><div class="student-name">Aditya More</div></td>
+              <td class="student-id">STU006</td>
+              <td><span class="badge absent">Absent</span></td>
+              <td><span class="badge present">Present</span></td>
+              <td><span class="badge present">Present</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- MENU POPULARITY -->
+      <div class="admin-card">
+        <h4>Today's Menu Popularity</h4>
+
+        <div class="menu-section">
+          <div class="menu-section-title">🍳 Breakfast</div>
+          <div class="menu-item-row">
+            <span class="item-name">Pav Bhaji</span>
+            <div class="pop-bar"><div class="pop-fill" style="width:90%;"></div></div>
+            <span class="item-votes">90%</span>
+          </div>
+          <div class="menu-item-row">
+            <span class="item-name">Poha</span>
+            <div class="pop-bar"><div class="pop-fill" style="width:75%;"></div></div>
+            <span class="item-votes">75%</span>
+          </div>
+        </div>
+
+        <div class="menu-section">
+          <div class="menu-section-title">🌤️ Lunch</div>
+          <div class="menu-item-row">
+            <span class="item-name">Dal Rice</span>
+            <div class="pop-bar"><div class="pop-fill" style="width:88%;"></div></div>
+            <span class="item-votes">88%</span>
+          </div>
+          <div class="menu-item-row">
+            <span class="item-name">Roti + Sabzi</span>
+            <div class="pop-bar"><div class="pop-fill" style="width:70%;"></div></div>
+            <span class="item-votes">70%</span>
+          </div>
+        </div>
+
+        <div class="menu-section">
+          <div class="menu-section-title">🌙 Dinner</div>
+          <div class="menu-item-row">
+            <span class="item-name">Paneer Masala</span>
+            <div class="pop-bar"><div class="pop-fill" style="width:95%;"></div></div>
+            <span class="item-votes">95%</span>
+          </div>
+          <div class="menu-item-row">
+            <span class="item-name">Dal Tadka</span>
+            <div class="pop-bar"><div class="pop-fill" style="width:60%;"></div></div>
+            <span class="item-votes">60%</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM GRID -->
+    <div class="admin-bottom">
+
+      <!-- STUDENT FEEDBACK -->
+      <div class="admin-card">
+        <h4>
+          Recent Student Feedback
+          <a href="feedback.html" class="view-all">View All</a>
+        </h4>
+        <div>
+          <div class="fb-item">
+            <div class="fb-meta">
+              <span class="fb-author">Sarah Johnson</span>
+              <span class="fb-rating">★★★★★</span>
+            </div>
+            <div class="fb-text">MealWise has completely transformed how I plan my meals!</div>
+          </div>
+          <div class="fb-item">
+            <div class="fb-meta">
+              <span class="fb-author">Mike Chen</span>
+              <span class="fb-rating">★★★★★</span>
+            </div>
+            <div class="fb-text">Love the variety of healthy options. Makes eating smart easier.</div>
+          </div>
+          <div class="fb-item">
+            <div class="fb-meta">
+              <span class="fb-author">Emily Rodriguez</span>
+              <span class="fb-rating">★★★★☆</span>
+            </div>
+            <div class="fb-text">Great app! Would love to see more vegetarian options added.</div>
+          </div>
+          <div class="fb-item">
+            <div class="fb-meta">
+              <span class="fb-author">Rahul Sharma</span>
+              <span class="fb-rating">★★★★★</span>
+            </div>
+            <div class="fb-text">Booking system is seamless. No more long queues!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POLL RESULTS + ATTENDANCE -->
+      <div class="admin-card">
+        <h4>📊 Poll Results — Today's Attendance</h4>
+        <div>
+          <div class="as-row">
+            <div class="as-meal">☀️ Breakfast</div>
+            <div class="as-bar-container">
+              <div class="as-bar"><div class="as-fill" style="width:88%;"></div></div>
+            </div>
+            <div class="as-count">301</div>
+          </div>
+          <div class="as-row">
+            <div class="as-meal">🌤️ Lunch</div>
+            <div class="as-bar-container">
+              <div class="as-bar"><div class="as-fill" style="width:65%;"></div></div>
+            </div>
+            <div class="as-count">222</div>
+          </div>
+          <div class="as-row">
+            <div class="as-meal">🍵 Snacks</div>
+            <div class="as-bar-container">
+              <div class="as-bar"><div class="as-fill" style="width:45%;"></div></div>
+            </div>
+            <div class="as-count">154</div>
+          </div>
+          <div class="as-row">
+            <div class="as-meal">🌙 Dinner</div>
+            <div class="as-bar-container">
+              <div class="as-bar"><div class="as-fill" style="width:72%;"></div></div>
+            </div>
+            <div class="as-count">246</div>
+          </div>
+        </div>
+
+        <div class="alert-box">
+          📉 55 students skipping dinner — reduce food prep by ~18% to cut waste.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function exportReport() {
+      showToast('📤 Report exported successfully!');
+    }
+  </script>
+
+</body>
+</html>
