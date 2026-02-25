@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', setActiveNav);
 function renderNavbar() {
   const nav = `
     <nav>
-      <a href="home.html" class="logo">
+      <a href="index.html" class="logo">
         <div class="logo-icon">🍽️</div>
         <div class="logo-text">
           <strong>MealWise</strong>
@@ -33,7 +33,7 @@ function renderNavbar() {
         </div>
       </a>
       <div class="nav-links">
-        <a href="home.html"      class="nav-btn ghost" data-page="home.html">🎓 Student</a>
+        <a href="index.html"      class="nav-btn ghost" data-page="index.html">🎓 Student</a>
         <a href="menu.html"      class="nav-btn ghost" data-page="menu.html">✅ Easy Meal Booking</a>
         <a href="poll.html"      class="nav-btn ghost" data-page="poll.html">📊 Mess Poll</a>
         <a href="feedback.html"  class="nav-btn ghost" data-page="feedback.html">💬 Feedback</a>
